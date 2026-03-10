@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Detector de Gestos</title>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js"></script>
+</head>
+<body>
+  <video id="input-video" style="display: none;"></video>
+  <canvas id="output-canvas" width="640" height="480"></canvas>
+
+  <script type="module">
+    const videoElement = document.getElementById('input-video');
+    const canvasElement = document.getElementById('output-canvas');
+    const canvasCtx = canvasElement.getContext('2d');
+
+    const hands = new Hands({locateFile: (file) => `https://cdn.jsdelivr.net/npm/@mediapipe/hands/${file}`});
+    hands.setOptions({ maxNumHands: 1, modelComplexity: 1 });
+
+    hands.onResults((results) => {
+      canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
+      if (results.multiHandLandmarks) {
+        for (const landmarks of results.multiHandLandmarks) {
+          // Aquí es donde dibujaremos o detectaremos el gesto
+          landmarks.forEach(pt => {
+            canvasCtx.fillStyle = 'red';
+            canvasCtx.beginPath();
+            canvasCtx.arc(pt.x * 640, pt.y * 480, 5, 0, 2 * Math.PI);
+            canvasCtx.fill();
+          });
+        }
+      }
+    });
+
+    const camera = new Camera(videoElement, {
+      onFrame: async () => { await hands.send({image: videoElement}); },
+      width: 640, height: 480
+    });
+    camera.start();
+  </script>
+</body>
+</html>
