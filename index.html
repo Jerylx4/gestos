@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detector de Gestos - Interfaz Minimalista</title>
+    <title>Detección de gestos</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
@@ -104,7 +104,6 @@
 
             const landmarks = results.multiHandLandmarks[0];
 
-            // Trazado de dedos en escala de grises
             drawConnectors(canvasCtx, landmarks, HAND_CONNECTIONS, {color: '#cccccc', lineWidth: 1.5});
             drawLandmarks(canvasCtx, landmarks, {color: '#ffffff', lineWidth: 1, radius: isMobile ? 3 : 1.5});
 
@@ -113,21 +112,20 @@
             let isFist = false;
 
             if (fingerCount === 5) {
-                description = '👋 MANO ABIERTA';
+                description = 'MANO ABIERTA';
             } else if (fingerCount === 0) {
-                description = '✊ PUÑO CERRADO';
+                description = 'PUÑO CERRADO';
                 isFist = true;
             } else if (fingerCount === 1) {
-                description = '☝️ UN DEDO';
+                description = 'UN DEDO';
             } else if (fingerCount === 2) {
-                description = '✌️ DOS DEDOS';
+                description = 'DOS DEDOS';
             } else if (fingerCount === 3) {
-                description = '🤟 TRES DEDOS';
+                description = 'TRES DEDOS';
             } else if (fingerCount === 4) {
-                description = '🖖 CUATRO DEDOS';
+                description = 'CUATRO DEDOS';
             }
 
-            // Usamos color blanco para indicar que está rastreando activamente
             updateUI('RASTREANDO', 'bg-white', description, isFist);
             canvasCtx.restore();
         }
@@ -167,3 +165,4 @@
     </script>
 </body>
 </html>
+
